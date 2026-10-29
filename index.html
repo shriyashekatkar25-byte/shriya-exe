@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHRIYA.EXE · Studio Archive</title>
+<meta name="description" content="SHRIYA.EXE — the living archive of Shriya Shekatkar's creative-technology studio. One original application per drop.">
+<meta name="theme-color" content="#120812">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23120812'/%3E%3Cpath d='M40 10a23 23 0 1 0 0 44 18 18 0 1 1 0-44z' fill='%23e8c98a'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Unbounded:wght@400..800&family=VT323&family=Tiro+Devanagari+Marathi&display=swap" rel="stylesheet">
+<style>
+/* Tokens. Contrast: ivory on espresso 15.9:1, brass on espresso 9.1:1, muted on espresso 7.4:1. */
+:root{
+  --bg:#120812; --bg2:#1d0f1c; --ivory:#f6eee3; --muted:#c7b3bd; --brass:#e8c98a; --rose:#f2b8cf; --rani:#e2007a; --line:rgba(246,238,227,.14);
+  --f-d:'Unbounded',system-ui,sans-serif; --f-s:'Bodoni Moda',Georgia,serif; --f-p:'VT323',monospace; --f-dv:'Tiro Devanagari Marathi',serif;
+  --ease:cubic-bezier(.22,1,.36,1); --spring:cubic-bezier(.34,1.56,.64,1);
+}
+*{box-sizing:border-box} html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ivory);font-family:var(--f-d);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--brass);outline-offset:3px;border-radius:4px}
+#field{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1240px;margin:0 auto;padding:0 24px}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:18px 0;border-bottom:1px solid var(--line);font-family:var(--f-p);font-size:19px;color:var(--muted);gap:12px;flex-wrap:wrap}
+header.top b{color:var(--ivory);font-weight:400}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--rani);box-shadow:0 0 12px var(--rani);margin-right:8px;animation:pulse 2.4s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.hero{padding:9vh 0 6vh;display:grid;grid-template-columns:1.4fr 1fr;gap:40px;align-items:end}
+.hero h1{margin:0;font-weight:800;font-size:clamp(52px,11vw,148px);line-height:.86;letter-spacing:-.045em}
+.hero h1 .chrome{display:block}
+.hero h1 .sub{display:block;font-family:var(--f-s);font-style:italic;font-weight:400;letter-spacing:-.01em;font-size:.42em;color:var(--brass);margin-top:.18em}
+.chrome{background:linear-gradient(180deg,#fff 0%,#f4dce8 38%,#9d8a96 50%,#fff 64%,#d9c7d1 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.manifesto{font-family:var(--f-s);font-size:clamp(17px,1.6vw,21px);line-height:1.5;color:var(--ivory)}
+.manifesto p{margin:0 0 14px}.manifesto em{color:var(--rose)}
+.manifesto .sig{font-family:var(--f-dv);color:var(--brass);font-size:20px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-bottom:46px;background:rgba(29,15,28,.6);backdrop-filter:blur(8px)}
+.stat{padding:18px 20px;border-right:1px solid var(--line)}.stat:last-child{border-right:0}
+.stat b{display:block;font-family:var(--f-p);font-weight:400;font-size:44px;line-height:1;color:var(--brass)}
+.stat small{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:22px}
+.search{flex:1 1 260px;height:46px;border-radius:23px;border:1px solid var(--line);background:rgba(246,238,227,.06);color:var(--ivory);padding:0 20px;font:inherit}
+.search::placeholder{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{height:32px;padding:0 14px;border-radius:16px;border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-size:11px;cursor:pointer;transition:all .2s var(--ease)}
+.chip:hover{color:var(--ivory);border-color:var(--muted)}
+.chip[aria-pressed=true]{background:var(--ivory);color:var(--bg);border-color:var(--ivory)}
+.label{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:0 0 14px;font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-bottom:70px}
+.tile{position:relative;border-radius:20px;overflow:hidden;border:1px solid var(--line);background:var(--bg2);display:flex;flex-direction:column;min-height:420px;transition:transform .5s var(--spring),border-color .3s;animation:rise .7s var(--ease) backwards}
+.tile:hover{transform:translateY(-6px) rotate(-.4deg);border-color:rgba(232,201,138,.5)}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+.tile svg.art{width:100%;height:220px;display:block}
+.tile .no{position:absolute;top:14px;left:16px;font-family:var(--f-p);font-size:22px;color:#fff;mix-blend-mode:difference}
+.tile .body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tile h3{margin:0;font-size:19px;font-weight:700;letter-spacing:-.01em;line-height:1.15}
+.tile p{margin:0;font-family:var(--f-s);font-size:15px;color:var(--muted);line-height:1.4}
+.tile .topics{display:flex;flex-wrap:wrap;gap:4px;margin-top:auto}
+.tile .topics span{font-size:9.5px;letter-spacing:.06em;padding:3px 8px;border-radius:10px;background:rgba(246,238,227,.07);color:var(--muted)}
+.tile .links{display:flex;gap:8px;margin-top:10px}
+.btn{flex:1;text-align:center;height:38px;line-height:36px;border-radius:19px;border:1px solid var(--line);text-decoration:none;font-size:11.5px;font-weight:600;transition:all .2s}
+.btn:hover{background:var(--ivory);color:var(--bg)}
+.btn.hot{background:linear-gradient(180deg,#ff6fb5,var(--rani) 50%,#b0005f);border-color:transparent;color:#fff}
+.btn.hot:hover{filter:brightness(1.1);color:#fff}
+.empty,.notice{border:1px dashed var(--line);border-radius:18px;padding:30px;text-align:center;font-family:var(--f-s);font-size:17px;color:var(--muted);grid-column:1/-1}
+.notice{font-size:14px;padding:14px;margin-bottom:18px;text-align:left}
+.timeline{position:relative;margin:0 0 80px;padding:0;list-style:none;border-left:1px solid var(--line)}
+.timeline li{position:relative;padding:0 0 22px 26px}
+.timeline li::before{content:'';position:absolute;left:-6px;top:6px;width:11px;height:11px;border-radius:50%;background:var(--bg);border:2px solid var(--brass)}
+.timeline time{font-family:var(--f-p);font-size:18px;color:var(--brass);display:block}
+.timeline a{font-weight:600;text-decoration:none}.timeline a:hover{color:var(--rose)}
+.timeline span{display:block;font-family:var(--f-s);color:var(--muted);font-size:14px}
+footer{border-top:1px solid var(--line);padding:26px 0 40px;font-size:11px;color:var(--muted);line-height:1.7}
+.sk{background:linear-gradient(90deg,var(--bg2),#2a1828,var(--bg2));background-size:200% 100%;animation:sh 1.4s infinite;min-height:420px;border-radius:20px}
+@keyframes sh{to{background-position:-200% 0}}
+@media (max-width:820px){.hero{grid-template-columns:1fr;padding-top:6vh}.stats{grid-template-columns:repeat(2,1fr)}.stat:nth-child(2){border-right:0}.stat:nth-child(-n+2){border-bottom:1px solid var(--line)}}
+@media (max-width:420px){.wrap{padding:0 16px}.grid{grid-template-columns:1fr}.stat b{font-size:34px}}
+@media (prefers-reduced-motion:reduce){*,*::before{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<canvas id="field" aria-hidden="true"></canvas>
+<div class="wrap">
+  <header class="top"><span><span class="dot"></span><b>SHRIYA.EXE</b> · studio archive</span><span id="clock">—</span></header>
+  <section class="hero">
+    <h1><span class="chrome">SHRIYA</span><span class="chrome">.EXE</span><span class="sub">a living studio archive</span></h1>
+    <div class="manifesto">
+      <p>Every drop is one original application — a working object, not a mock-up. Some are research tools, some are instruments, some are <em>artifacts recovered from an internet that never quite existed</em>.</p>
+      <p>The rule is simple: real computation, honest data, no borrowed images. Sociology and statistics underneath; colour, type and motion on top.</p>
+      <p class="sig">— श्रिया शेकटकर · Shriya Shekatkar</p>
+    </div>
+  </section>
+  <section class="stats" aria-label="Studio statistics">
+    <div class="stat"><b id="s-drops">—</b><small>drops shipped</small></div>
+    <div class="stat"><b id="s-topics">—</b><small>distinct topics</small></div>
+    <div class="stat"><b id="s-lang">—</b><small>main languages</small></div>
+    <div class="stat"><b id="s-latest">—</b><small>latest drop</small></div>
+  </section>
+  <p class="label">The collection</p>
+  <div class="controls">
+    <label class="sr" style="position:absolute;left:-9999px" for="q">Search drops</label>
+    <input id="q" class="search" type="search" placeholder="Search drops by name, idea or technique…" autocomplete="off">
+    <div class="chips" id="chips" role="group" aria-label="Filter by topic"></div>
+  </div>
+  <div id="notice"></div>
+  <div class="grid" id="grid" aria-live="polite"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>
+  <p class="label">Timeline</p>
+  <ol class="timeline" id="timeline"></ol>
+  <footer>Original work by Shriya Shekatkar · SHRIYA.EXE · Synthetic or demo data is labeled as such. Not affiliated with any film, studio or company.<br>
+  This page lists public repositories tagged <code>shriya-exe</code> via the GitHub API and updates itself. · <a href="https://github.com/shriyashekatkar25-byte">GitHub ↗</a></footer>
+</div>
+<script>
+(() => {
+  const USER = 'shriyashekatkar25-byte';
+  const API = `https://api.github.com/search/repositories?q=user:${USER}+topic:shriya-exe&sort=created&order=asc&per_page=100`;
+  const CACHE = 'shriyaexe:repos:v1';
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const $ = (s) => document.querySelector(s);
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  let repos = [], active = null, query = '';
+
+  // ── generative tile art: each repo name seeds a unique composition ──
+  function hash(s){ let h = 2166136261; for (const c of s) { h ^= c.charCodeAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
+  function rnd(seed){ let a = seed; return () => { a = (a + 0x6d2b79f5) >>> 0; let t = Math.imul(a ^ (a >>> 15), a | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+  const PALETTES = [['#e2007a','#f4e1bf','#b5122f','#2a0e25'],['#0fb5c2','#c9b8ff','#e6f7ff','#0a1838'],['#5b2a86','#0f7b5f','#e0b44a','#1b0b2e'],['#e8c98a','#f2b8cf','#6b2a3a','#1d0f1c'],['#9fa8c9','#ff6fb5','#e9e2ff','#141228']];
+  function art(name){
+    const r = rnd(hash(name)), p = PALETTES[Math.floor(r()*PALETTES.length)], id = 'g' + hash(name).toString(36);
+    const n = 9 + Math.floor(r()*8), shapes = [];
+    const base = Math.floor(r()*3);
+    for (let i = 0; i < n; i++) {
+      const kind = r() < .7 ? base : Math.floor(r()*3);
+      const cx = 20 + r()*360, cy = 20 + r()*180, s = 20 + r()*90, c = p[i % 3], rot = Math.floor(r()*360), dur = (8 + r()*14).toFixed(1);
+      const anim = reduced ? '' : `<animateTransform attributeName="transform" type="rotate" from="${rot} ${cx} ${cy}" to="${rot + (r() > .5 ? 360 : -360)} ${cx} ${cy}" dur="${dur}s" repeatCount="indefinite"/>`;
+      if (kind === 0) shapes.push(`<circle cx="${cx}" cy="${cy}" r="${s/2}" fill="none" stroke="${c}" stroke-width="${1 + r()*6}" opacity=".85"/>`);
+      else if (kind === 1) { const k = 3 + Math.floor(r()*6); let d=''; for (let j=0;j<k*2;j++){ const a=j/(k*2)*Math.PI*2, rr = j%2? s*.25 : s*.55; d += (j?'L':'M') + (cx+Math.cos(a)*rr).toFixed(1)+' '+(cy+Math.sin(a)*rr).toFixed(1); } shapes.push(`<path d="${d}Z" fill="${c}" opacity=".9">${anim}</path>`); }
+      else shapes.push(`<rect x="${cx - s/2}" y="${cy - s/6}" width="${s}" height="${s/3}" rx="${s/6}" fill="${c}" opacity=".9">${anim}</rect>`);
+    }
+    return `<svg class="art" viewBox="0 0 400 220" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="${id}" cx=".3" cy=".2" r="1"><stop offset="0" stop-color="${p[1]}" stop-opacity=".55"/><stop offset=".6" stop-color="${p[3]}"/></radialGradient></defs><rect width="400" height="220" fill="${p[3]}"/><rect width="400" height="220" fill="url(#${id})"/>${shapes.join('')}<rect width="400" height="220" fill="url(#${id})" opacity=".15"/></svg>`;
+  }
+
+  const title = (r) => r.name.replace(/-/g, ' ').toUpperCase();
+  const demo = (r) => r.homepage || (r.has_pages ? `https://${USER}.github.io/${r.name}/` : null);
+  const fmt = (d) => new Date(d).toLocaleDateString(undefined, { day:'2-digit', month:'short', year:'numeric' });
+
+  function render(){
+    const q = query.trim().toLowerCase();
+    const list = repos.filter((r) => (!active || (r.topics||[]).includes(active)) && (!q || `${r.name} ${r.description||''} ${(r.topics||[]).join(' ')}`.toLowerCase().includes(q)));
+    $('#grid').innerHTML = list.length ? list.map((r, i) => {
+      const n = repos.indexOf(r) + 1, d = demo(r);
+      return `<article class="tile" style="animation-delay:${Math.min(i,8)*70}ms">${art(r.name)}<span class="no">#${String(n).padStart(3,'0')}</span>
+        <div class="body"><h3>${esc(title(r))}</h3><p>${esc(r.description || 'An untitled drop.')}</p>
+        <div class="topics">${(r.topics||[]).filter((t) => t !== 'shriya-exe').map((t) => `<span>${esc(t)}</span>`).join('')}</div>
+        <div class="links">${d ? `<a class="btn hot" href="${esc(d)}" target="_blank" rel="noopener">Live demo ↗</a>` : ''}<a class="btn" href="${esc(r.html_url)}" target="_blank" rel="noopener">Source</a></div></div></article>`;
+    }).join('') : `<div class="empty">${repos.length ? 'No drop matches that search.' : 'The archive is warming up — the first drop is on its way.'}</div>`;
+    const topics = [...new Set(repos.flatMap((r) => r.topics || []))].filter((t) => t !== 'shriya-exe').sort();
+    $('#chips').innerHTML = [`<button class="chip" aria-pressed="${!active}" data-t="">all</button>`, ...topics.map((t) => `<button class="chip" aria-pressed="${active===t}" data-t="${esc(t)}">${esc(t)}</button>`)].join('');
+    $('#timeline').innerHTML = [...repos].reverse().map((r) => `<li><time datetime="${r.created_at}">${fmt(r.created_at)}</time><a href="${esc(demo(r) || r.html_url)}">${esc(title(r))}</a><span>${esc(r.description || '')}</span></li>`).join('') || '<li><span>No drops yet.</span></li>';
+    $('#s-drops').textContent = String(repos.length).padStart(3, '0');
+    $('#s-topics').textContent = topics.length;
+    $('#s-lang').textContent = new Set(repos.map((r) => r.language).filter(Boolean)).size || '—';
+    $('#s-latest').textContent = repos.length ? '#' + String(repos.length).padStart(3, '0') : '—';
+  }
+
+  $('#q').addEventListener('input', (e) => { query = e.target.value; render(); });
+  $('#chips').addEventListener('click', (e) => { const b = e.target.closest('[data-t]'); if (!b) return; active = b.dataset.t || null; render(); });
+
+  async function load(){
+    try {
+      const res = await fetch(API, { headers: { Accept: 'application/vnd.github+json' } });
+      if (!res.ok) throw new Error(res.status === 403 ? 'rate-limited' : 'HTTP ' + res.status);
+      const data = await res.json();
+      repos = (data.items || []).sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+      try { localStorage.setItem(CACHE, JSON.stringify({ t: Date.now(), repos })); } catch {}
+    } catch (err) {
+      let cached = null; try { cached = JSON.parse(localStorage.getItem(CACHE)); } catch {}
+      if (cached) repos = cached.repos;
+      $('#notice').innerHTML = `<div class="notice">The GitHub API is unavailable right now (${esc(err.message)}). ${cached ? `Showing the copy saved on ${fmt(cached.t)}.` : ''} You can also browse <a href="https://github.com/${USER}?tab=repositories&q=topic%3Ashriya-exe">all drops on GitHub</a>.</div>`;
+    }
+    render();
+  }
+  load();
+
+  const tick = () => $('#clock').textContent = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' }) + ' · local';
+  tick(); setInterval(tick, 30000);
+
+  // ── ambient field: slow drifting sparkle constellation ──
+  const c = $('#field'), g = c.getContext('2d');
+  let W, H, pts;
+  function size(){ const d = Math.min(devicePixelRatio || 1, 2); W = innerWidth; H = innerHeight; c.width = W*d; c.height = H*d; g.setTransform(d,0,0,d,0,0);
+    const R = rnd(7); pts = Array.from({ length: Math.round(W*H/14000) }, () => ({ x: R()*W, y: R()*H, z: .3 + R()*.7, p: R()*6.28 })); }
+  function frame(t){ g.clearRect(0,0,W,H);
+    const grad = g.createRadialGradient(W*.85, H*.1, 0, W*.85, H*.1, Math.max(W,H)*.8); grad.addColorStop(0,'rgba(226,0,122,.16)'); grad.addColorStop(1,'rgba(18,8,18,0)'); g.fillStyle = grad; g.fillRect(0,0,W,H);
+    for (const p of pts){ const y = (p.y + (reduced ? 0 : t*.006*p.z)) % H, a = .25 + .5*Math.abs(Math.sin(t/1400 + p.p)); g.fillStyle = `rgba(246,238,227,${a*p.z})`; const s = p.z*1.6; g.fillRect(p.x, y, s, s); if (p.z > .92){ g.fillRect(p.x-3, y+s/2-.4, 6+s, .8); g.fillRect(p.x+s/2-.4, y-3, .8, 6+s); } }
+    if (!reduced) requestAnimationFrame(frame); }
+  size(); addEventListener('resize', () => { size(); if (reduced) frame(0); }); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
